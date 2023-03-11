@@ -34,7 +34,7 @@ coffee <- read.csv('https://raw.githubusercontent.com/rrachelxi/DAS-Group-11/mai
 ```
 
 ```{r Exploratory Data Analysis}
-skim(coffee) 
+skim_without_charts(coffee) 
 
 mean_altitude <- mean(coffee$altitude_mean_meters,na.rm = TRUE)
 
@@ -49,7 +49,7 @@ coffee_m <- coffee %>%
     !is.na(country_of_origin) & 
     !is.na(harvested))
 
-skim(coffee_m)
+skim_without_charts(coffee_m)
 
 ggpairs(coffee_m[,c(-1,-7)], aes(color=Qualityclass,alpha=0.2))
 
@@ -68,7 +68,7 @@ coffee_w <- coffee_m %>%
     acidity > 6 & 
     altitude_mean_meters < 100000)
 
-skim(coffee_w)
+skim_without_charts(coffee_w)
 
 # for numeric variables
 ggpairs(coffee_w[c(-1,-7)], aes(color=Qualityclass,alpha=0.2))
