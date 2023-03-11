@@ -1,5 +1,5 @@
 ---
-title: "glm_analysis"
+title: "Group_11_Analysis"
 author: "Group11"
 date: "2023-03-09"
 output: html_document
@@ -7,24 +7,84 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
-## R Markdown
+## Note
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+The slides should include the aims of the analysis, exploratory data analysis, statistical modelling and results, conclusions and future work/extensions.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Aims of the Analysis
 
-```{r cars}
-summary(cars)
+## Exploratory Data Analysis
+
+```{r Loading}
+
+#load library
+library(tidyr)
+library(ggplot2)
+library(skimr)
+library(dplyr)
+library(gridExtra)
+library(GGally)
+library(gmodels)
+
+#load csv
+coffee <- read.csv('https://raw.githubusercontent.com/rrachelxi/DAS-Group-11/main/dataset11.csv')
 ```
 
-## Including Plots
+```{r Exploratory Data Analysis}
+skim(coffee) 
 
-You can also embed plots, for example:
+mean_altitude <- mean(coffee$altitude_mean_meters,na.rm = TRUE)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+coffee_m <- coffee %>%
+  mutate(
+    harvested = as.factor(harvested),
+    country_of_origin = as.factor(country_of_origin),
+    Qualityclass = as.factor(Qualityclass),
+    altitude_mean_meters = replace_na(altitude_mean_meters,mean(altitude_mean_meters,na.rm = TRUE)) # Replace NA in altitude_mean_meters by its means
+    ) %>%
+  filter(
+    !is.na(country_of_origin) & 
+    !is.na(harvested))
+
+skim(coffee_m)
+
+ggpairs(coffee_m[,c(-1,-7)], aes(color=Qualityclass,alpha=0.2))
+
+# detect outlier
+ggplot(coffee_m,aes(x=aroma,y=acidity,color=Qualityclass)) +
+  geom_point() +
+  geom_jitter(width = 0.2, height = 0.2)
+
+ggplot(coffee_m,aes(x=Qualityclass,y=altitude_mean_meters,color=Qualityclass)) +
+  geom_point() +
+  geom_jitter(width = 0.2, height = 0.2)
+
+coffee_w <- coffee_m %>%
+  filter(
+    aroma > 6 & 
+    acidity > 6 & 
+    altitude_mean_meters < 100000)
+
+skim(coffee_w)
+
+# for numeric variables
+ggpairs(coffee_w[c(-1,-7)], aes(color=Qualityclass,alpha=0.2))
+
+# for categorical variables
+
+ggplot(coffee_w, aes(x=harvested, group=Qualityclass )) +
+  geom_bar(aes(y=after_stat(prop), fill = Qualityclass),  position = "dodge")
+
+prop.table(table(coffee_w$Qualityclass,coffee_w$harvested),2) %>%
+  round(digits=2)
+
+ggplot(coffee_w, aes(x=country_of_origin, group=Qualityclass )) +
+  geom_bar(aes(y=after_stat(prop), fill = Qualityclass),  position = "dodge")
+
+prop.table(table(coffee_w$Qualityclass,coffee_w$country_of_origin),2) %>%
+  round(digits=2)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
