@@ -1,30 +1,250 @@
 ---
-title: "glm_analysis"
+title: "Group_11_Analysis"
 author: "Group11"
 date: "2023-03-09"
-output: html_document
+output:
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
-## R Markdown
+# Aims of the Analysis
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+# Exploratory Data Analysis
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r Loading, message=FALSE, warning=FALSE}
 
-```{r cars}
-summary(cars)
+# load library
+library(tidyr)
+library(ggplot2)
+library(skimr)
+library(dplyr)
+library(gridExtra)
+library(GGally)
+library(gmodels)
+library(stats)
+library(sjPlot)
+library(jtools)
+library(MASS)
+
+# load the dataset for group 11
+coffee <- read.csv('https://raw.githubusercontent.com/rrachelxi/DAS-Group-11/main/dataset11.csv')
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+```{r skim data}
+# skim the dataset
+skim_without_charts(coffee)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+# There are missing values in altitude_mean_meters, country_of_origin and harvested
+# For altitude_mean_meters:
+# missing values are replaced with altitude_mean_meters mean values
+# For country_of_origin and harvested:
+# since observations with NA are in relatively small amount, they are dropped
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r deal with missing values}
+# Calculate the mean value for altitude_mean_meters
+mean_altitude <- mean(coffee$altitude_mean_meters,na.rm = TRUE)
+
+# Perform data wrangling to the dataset
+coffee_m <- coffee %>%
+  mutate(
+    # turn harvested into the factor type  for analysis
+    harvested = as.factor(harvested), 
+    # turn country_of_origin into the factor type for analysis
+    country_of_origin = as.factor(country_of_origin), 
+    # turn Qualityclass into the factor type for analysis
+    Qualityclass = as.factor(Qualityclass), 
+    # Replace NA in altitude_mean_meters by the mean value)
+    altitude_mean_meters = replace_na(altitude_mean_meters, mean_altitude)) %>% 
+  filter(
+    !is.na(country_of_origin) & # drop observations with NA in country_of_origin
+    !is.na(harvested)) # drop observations with NA in harvested
+
+# Skim the dataset the second time to check if NA values still present
+skim_without_charts(coffee_m)
+
+# The dataset is now with no NA values
+```
+
+
+```{r pair plot of coffee_m, message=FALSE, warning=FALSE, fig.height = 10 , fig.width = 12, fit.align = "center", fig.cap = "\\label{fig:pp1} Pair plot of numeric variables and Qualityclass."}
+# Draw pair plot to visualize data
+ggpairs(coffee_m[,c(-1,-7)], 
+        aes(color=Qualityclass,alpha=0.2), 
+        title = "Distribution between variables")
+
+# Outliers are spotted for aroma, acidity and altitude_mean_meters
+```
+
+```{r scatter plot aroma acidity, fig.cap = "\\label{fig:sp1} Dsitribution between aroma and acidity."}
+# Draw scatter plots to show outliers more clearly
+# Draw scatter plots for aroma and acidity
+ggplot(coffee_m,aes(x=aroma,y=acidity,color=Qualityclass)) +
+  geom_point() +
+  geom_jitter(width = 0.2, height = 0.2) +
+  labs(x = "Aroma grade (ranging from 0-10)", 
+       y = "Acidity grade (ranging from 0-10)",
+       title = "Aroma grade and acidity grade for coffee quality")
+```
+
+```{r scatter plot altitude_mean_meters, fig.cap = "\\label{fig:sp2} Scatter plot of altitude_mean_meters."}
+# Draw scatter plots for altitude_mean_meters
+ggplot(coffee_m,aes(x=Qualityclass,y=altitude_mean_meters,color=Qualityclass)) +
+  geom_point() +
+  geom_jitter(width = 0.2, height = 0.2) +
+  labs(x = "Quality Class", 
+       y = "Mean altitude of the growers farm (in metres)",
+       title = "Mean altitude of the growers group by coffee quality") +
+  theme(legend.position = 'none')
+  
+```
+
+```{r drop outliers}
+# Drop outlier observations from the dataset
+coffee_w <- coffee_m %>%
+  filter(
+    aroma > 6 & 
+    acidity > 6 & 
+    altitude_mean_meters < 100000)
+
+# Skim the dataset the third time to give insights on variables
+skim_without_charts(coffee_w)
+```
+
+```{r pair plot of coffee_w, fig.height = 10 , fig.width = 12, fit.align = "center", fig.cap = "\\label{fig:pp1} Pair plot of numeric variables and Qualityclass (without outliers).", message=FALSE, warning=FALSE}
+# For numeric variables, pair plot, inclduing boxplots, is drawn to show distribution and correlation
+ggpairs(coffee_w[c(-1,-7)], 
+        aes(color=Qualityclass,alpha=0.2), 
+        title = "Distribution between variables(without outliers)")
+
+# Collinearity is shown in pair plot, could be discussed in extension/further work
+```
+
+```{r barplot of harvested, fig.cap = "\\label{fig:bp1} Bar plot of quality class by harvested year."}
+# For categorical variables
+# Draw a barplot to visualize the distribution of harvested and Qualityclass
+ggplot(coffee_w, aes(x=harvested, y= after_stat(prop), group=Qualityclass, fill=Qualityclass )) +
+  geom_bar(position = "dodge") +
+  labs(x = "Year the batch was harvested",
+       y = "Proportion",
+       title = "Porportions of quality class by year the batch was harvested")
+```
+
+```{r patble harvested} 
+# Build a table of proportions to support the barplot of harvested and Qualityclass
+prop.table(table(coffee_w$Qualityclass,coffee_w$harvested),2) %>%
+  round(digits=2)
+```
+
+```{r barplot of country,fig.cap = "\\label{fig:bp2} Barplot of quality class by country of origin."}
+# Draw a barplot to visualize the distribution of country_of_origin and Qualityclass
+ggplot(coffee_w, aes(x=country_of_origin, group=Qualityclass )) +
+  geom_bar(aes(y=after_stat(prop), fill = Qualityclass),  position = "dodge") +
+  labs(x = "Country of origin",
+       y = "Proportion",
+       title = "Porportions of quality class by country of origin") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+```
+
+```{r patble country_of_origin} 
+# Buil-d a table of proportions to support the barplot of country_of_origin and Qualityclass
+prop.table(table(coffee_w$Qualityclass,coffee_w$country_of_origin),2) %>%
+  round(digits=2)
+
+
+```
+
+# Statistical Modelling
+
+```{r feature selection}
+# Build the full glm model
+model_full <- glm(
+  Qualityclass ~ 
+               aroma + 
+               flavor +
+               acidity +
+               category_two_defects +
+               altitude_mean_meters +
+               harvested +
+               country_of_origin,
+  data = coffee_w,
+  family = binomial(link="logit"))
+
+# Conduct stepwise feature selection by AIC
+model_step<-model_full %>%
+  stepAIC(trace=TRUE)
+```
+
+```{r summary model_step}
+# Pull summary of model chosen by stepwise selection
+summary(model_step)
+```
+
+```{r model_step accuracy}
+# Adding predict results from model_step to dataset
+coffee_step <- coffee_w %>%
+  mutate(logodds_good = predict(model_step),
+         probs_good = fitted(model_step)) %>%
+  mutate(odd_good = exp(logodds_good),
+         class_pred = ifelse(probs_good>0.5,"Poor","Good"))
+
+# Check accuracy for model_step
+sum(coffee_step$class_pred == coffee_step$Qualityclass)/nrow(coffee_step)
+```
+
+```{r model with significant coefficients}
+# Build a model with major terms with significant coefficients from model_step
+model_1 <- glm(
+  Qualityclass ~ 
+               aroma + 
+               flavor +
+               acidity,
+  data = coffee_w,
+  family = binomial(link="logit"))
+
+# Pull summary of model_1
+summ(model_1)
+```
+
+```{r model_1 accuracy}
+# Adding predict results from model_1 to dataset
+coffee_1 <- coffee_w %>%
+  mutate(logodds_good = predict(model_1),
+         probs_good = fitted(model_1)) %>%
+  mutate(odd_good = exp(logodds_good),
+         class_pred = ifelse(probs_good>0.5,"Poor","Good"))
+
+# Check accuracy for model_1
+sum(coffee_1$class_pred == coffee_1$Qualityclass)/nrow(coffee_1)
+```
+model_1 has slightly higher AIC and less accuracy than model_step, but all coefficients are significant, thus model_1 is chosen as the final model.
+
+```{r Log-Odds (Poor quality), fig.cap = "\\label{fig:lo} Point estimates and confidence intervals."}
+# Plot point estimate and confidence intervals of model_step
+plot_model(model_1, show.values = TRUE, title = "Log-Odds (Poor quality)")
+```
+
+```{r aroma, fig.cap = "\\label{fig:aroma} Probability of being poor quality by aroma."}
+# Plot estimate possibilities by each explanatory variables in model_1
+plot_model(model_1, type="pred", terms="aroma [all]", 
+           axis.title = "Probability",
+           title = "Probability of being poor quality by aroma")
+```
+```{r flavor, fig.cap = "\\label{fig:flavor} Probability of being poor quality by flavor."}
+# Plot estimate possibilities by each explanatory variables in model_1
+plot_model(model_1, type="pred", terms="flavor [all]", 
+           axis.title = "Probability",
+           title = "Probability of being poor quality by flavor")
+```
+```{r acidity, fig.cap = "\\label{fig:acidity} Probability of being poor quality by acidity"}
+# Plot estimate possibilities by each explanatory variables in model_1
+plot_model(model_1, type="pred", terms="acidity [all]", 
+           axis.title = "Probability",
+           title = "Probability of being poor quality by acidity")
+```
