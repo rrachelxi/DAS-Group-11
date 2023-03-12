@@ -115,7 +115,7 @@ coffee_w <- coffee_m %>%
 skim_without_charts(coffee_w)
 ```
 
-```{r pair plot of coffee_w, fig.height = 10 , fig.width = 12, fit.align = "center", fig.cap = "\\label{fig:pp1} Pair plot of numeric variables and Qualityclass (without outliers).", message=FALSE, warning=FALSE}
+```{r pair plot of coffee_w, fig.height = 10 , fig.width = 12, fit.align = "center", fig.cap = "\\label{fig:pp2} Pair plot of numeric variables and Qualityclass (without outliers).", message=FALSE, warning=FALSE}
 # For numeric variables, pair plot, inclduing boxplots, is drawn to show distribution and correlation
 ggpairs(coffee_w[c(-1,-7)], 
         aes(color=Qualityclass,alpha=0.2), 
@@ -152,7 +152,7 @@ ggplot(coffee_w, aes(x=country_of_origin, group=Qualityclass )) +
 ```
 
 ```{r patble country_of_origin} 
-# Buil-d a table of proportions to support the barplot of country_of_origin and Qualityclass
+# Build a table of proportions to support the barplot of country_of_origin and Qualityclass
 prop.table(table(coffee_w$Qualityclass,coffee_w$country_of_origin),2) %>%
   round(digits=2)
 
@@ -188,10 +188,10 @@ summary(model_step)
 ```{r model_step accuracy}
 # Adding predict results from model_step to dataset
 coffee_step <- coffee_w %>%
-  mutate(logodds_good = predict(model_step),
-         probs_good = fitted(model_step)) %>%
-  mutate(odd_good = exp(logodds_good),
-         class_pred = ifelse(probs_good>0.5,"Poor","Good"))
+  mutate(logodds_poor = predict(model_step),
+         probs_poor = fitted(model_step)) %>%
+  mutate(odd_poor = exp(logodds_poor),
+         class_pred = ifelse(probs_poor>0.5,"Poor","Good"))
 
 # Check accuracy for model_step
 sum(coffee_step$class_pred == coffee_step$Qualityclass)/nrow(coffee_step)
@@ -214,19 +214,21 @@ summ(model_1)
 ```{r model_1 accuracy}
 # Adding predict results from model_1 to dataset
 coffee_1 <- coffee_w %>%
-  mutate(logodds_good = predict(model_1),
-         probs_good = fitted(model_1)) %>%
-  mutate(odd_good = exp(logodds_good),
-         class_pred = ifelse(probs_good>0.5,"Poor","Good"))
+  mutate(logodds_poor = predict(model_1),
+         probs_poor = fitted(model_1)) %>%
+  mutate(odd_poor = exp(logodds_poor),
+         class_pred = ifelse(probs_poor>0.5,"Poor","Good"))
 
 # Check accuracy for model_1
 sum(coffee_1$class_pred == coffee_1$Qualityclass)/nrow(coffee_1)
 ```
 model_1 has slightly higher AIC and less accuracy than model_step, but all coefficients are significant, thus model_1 is chosen as the final model.
 
-```{r Log-Odds (Poor quality), fig.cap = "\\label{fig:lo} Point estimates and confidence intervals."}
-# Plot point estimate and confidence intervals of model_step
-plot_model(model_1, show.values = TRUE, title = "Log-Odds (Poor quality)")
+```{r Odds (Poor quality), fig.cap = "\\label{fig:lo} Point estimates and confidence intervals for odds."}
+# Plot point estimate and confidence intervals of model_1
+plot_model(model_1, show.values = TRUE, 
+           title = "Odds (Poor quality)",
+           show.p = FALSE, digits=3)
 ```
 
 ```{r aroma, fig.cap = "\\label{fig:aroma} Probability of being poor quality by aroma."}
