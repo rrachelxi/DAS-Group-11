@@ -16,7 +16,6 @@ knitr::opts_chunk$set(echo = TRUE)
 # Exploratory Data Analysis
 
 ```{r Loading, message=FALSE, warning=FALSE}
-
 # load library
 library(tidyr)
 library(ggplot2)
