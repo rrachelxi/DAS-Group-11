@@ -4,7 +4,7 @@ WELCOME!
 Hi, Group 11, below is some notes for the project:
 
 • The slides should include the aims of the analysis, exploratory data analysis, statistical modelling and results, conclusions and future work/extensions.
-
+ 
 For Collaborative Coding & Analysis:
 • Appropriate exploration of the allocated dataset using multiple exploratory techniques has been conducted and any possible patterns/anomalies have been identified. [5 marks]
 • Appropriate statistical methods have been correctly applied. [10 marks]
