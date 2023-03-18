@@ -282,6 +282,8 @@ plot_model(model_1, type="pred", terms="acidity [all]",
            title = "Probability of being poor quality by acidity")
 ```
 
+From Figures 8,9 and 10, it can be seen that the probability of being poor-quality would decrease with higher levels of aroma, flavor and acidity.
+
 # Step 3: Summary and further task
 
 Summary: Based on these plots above, high values of aroma, flavor and acidity all indicate a low probability of being poor coffee quality. In particular, the flavor has the most significant influence on the quality of coffee. 
