@@ -53,7 +53,7 @@ skim_without_charts(coffee) %>%
 
 skim_without_charts(coffee) %>%
   yank("factor") %>%
-  kable(caption = '\\label{tab:c2} The vector variable of the coffee data.', digits = 2)
+  kable(caption = '\\label{tab:c2} The factor variable of the coffee data.', digits = 2)
 ```
 
 From Table 1, there are 191 missing values in altitude_mean_meters, 56 missing values in harvested and 1 missing value in country_of_origin. Since altitude_mean_meters is a continuous variable and the amount of missing values is quite large, these missing values are replaced by the mean value. As for the harvested and country_of_origin, these missing values are deleted because of the small volumes. 
@@ -86,7 +86,7 @@ skim_without_charts(coffee_m) %>%
 ```{r skim coffee_m continue}
 skim_without_charts(coffee_m) %>%
   yank("factor") %>%
-  kable(caption = '\\label{tab:m2} The vector variable of the coffee_m data.', digits = 2)
+  kable(caption = '\\label{tab:m2} The factor variable of the coffee_m data.', digits = 2)
 ```
 
 The dataset is now with no missing value. Next, a pair plot is drawn to visualize data.
@@ -107,7 +107,7 @@ ggplot(coffee_m,aes(x=aroma,y=acidity,color=Qualityclass)) +
   geom_jitter(width = 0.2, height = 0.2) +
   labs(x = "Aroma grade (ranging from 0-10)", 
        y = "Acidity grade (ranging from 0-10)",
-       title = "Aroma grade and acidity grade for coffee quality")
+       title = "Aroma grade and acidity grade by coffee quality")
 ```
 
 \newpage
@@ -118,14 +118,14 @@ ggplot(coffee_m,aes(x=Qualityclass,y=altitude_mean_meters,color=Qualityclass)) +
   geom_jitter(width = 0.2, height = 0.2) +
   labs(x = "Quality Class", 
        y = "Mean altitude of the growers farm (in metres)",
-       title = "Mean altitude of the growers group by coffee quality") +
+       title = "Mean altitude of the growers farm by coffee quality") +
   theme(legend.position = 'none')
 ```
 
-It can be seen from Figure 1, 2 and 3 that there are many outilers in aroma, acidity and altitude_mean_meters. At the mean time, it can also be noticed that good-quality coffee tend to have a higher level of acidity and aroma, comparing with the poor-quality coffee. 
+It can be seen from Figure 1, 2 and 3 that there are many outilers in aroma, acidity and altitude_mean_meters. At the mean time, it can also be noticed that good quality coffee tend to have a higher level of acidity and aroma, comparing with the poor quality coffee. 
 
 ```{r drop outliers}
-# Outlies in aroma, acidity and altitude_mean_meters are dropped from the dataset
+# Outliers in aroma, acidity and altitude_mean_meters are dropped from the dataset
 coffee_w <- coffee_m %>%
   filter(
     aroma > 6 & 
@@ -144,17 +144,17 @@ skim_without_charts(coffee_w) %>%
 
 skim_without_charts(coffee_w) %>%
   yank("factor") %>%
-  kable(caption = '\\label{tab:w2} The vector variable of the coffee_w data.', digits = 2)
+  kable(caption = '\\label{tab:w2} The factor variable of the coffee_w data.', digits = 2)
 ```
 \newpage
 ```{r pair plot of coffee_w, fig.height = 10, fig.width = 14, fit.align = "center", fig.pos='h', fig.cap = "\\label{fig:pp2} Pair plot of numeric variables and Qualityclass (without outliers).", message=FALSE, warning=FALSE}
 # a pair plot without outliers is drawn to visualize data
 ggpairs(coffee_w[c(-1,-7)], 
         aes(color=Qualityclass,alpha=0.2), 
-        title = "Distribution between variables(without outliers)")
+        title = "Distribution between variables (without outliers)")
 ```
 
-From Figure 4, there is a relatively strong correlation between aroma and flavor (correlation: 0.770), similar to acidity and aroma (correlation: 0.643). And box plots of aroma, flavor and acidity show significant differences between classes of quality. 
+From Figure 4, there is a relatively strong correlation between aroma and flavor (correlation: 0.770). Acidity and flavor has the similar correlation (correlation: 0.760), following by the correlation of acidity and aroma (correlation: 0.643). Also, box plots of aroma, flavor and acidity show significant differences between classes of quality.
 \newpage
 ```{r barplot of harvested, fig.cap = "\\label{fig:bp1} Bar plot of quality class by harvested year."}
 # A bar plot to visualize the distribution of harvested and Qualityclass
@@ -165,7 +165,7 @@ ggplot(coffee_w, aes(x=harvested, y= after_stat(prop), group=Qualityclass, fill=
        title = "Proportions of quality class by year the batch was harvested")
 ```
 
-From Figure 5, the batch of the year 2012 has the highest proportion of good-quality coffee, with the batch of the year 2014 following behind. And the situation is the same for poor-quality coffee.
+From Figure 5, the batch of the year 2012 has the highest proportion of good quality coffee, with the batch of the year 2014 following behind. Similarly, the situation is the same for poor quality coffee.
 \newpage
 ```{r barplot of country, fig.cap = "\\label{fig:bp2} Barplot of quality class by country of origin."}
 # A bar plot to visualize the distribution of country_of_origin and Qualityclass
@@ -177,7 +177,7 @@ ggplot(coffee_w, aes(x=country_of_origin, group=Qualityclass )) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 ```
 
-From Figure 6, Mexico has the highest proportion of poor-quality coffee while Colombia has the highest proportion of good-quality coffee.
+From Figure 6, Mexico has the highest proportion of poor quality coffee while Colombia has the highest proportion of good quality coffee.
 
 \newpage
 # Step 2: Statistical Modelling
@@ -203,7 +203,7 @@ model_step<-model_full %>%
   stepAIC(trace=TRUE)
 ```
 
-Based on the AIC table, the model with variable of aroma, flavor, acidity, category_two_defects, altitude_mean_meters and country_of_region would be chosen (without harvested).
+Based on the AIC, the model with variable of aroma, flavor, acidity, category_two_defects, altitude_mean_meters and country_of_region would be chosen (without harvested).
 
 ```{r summary model_step}
 # A summary of the model chosen by stepwise selection
@@ -223,7 +223,7 @@ coffee_step <- coffee_w %>%
 sum(coffee_step$class_pred == coffee_step$Qualityclass)/nrow(coffee_step)
 ```
 
-The p values of aroma, flavor and acidity are smaller than 0.05, which indicates these variables have a significant relationship with the quality class of coffee. Then, a new model called model_1 with these significant coefficients is built.
+The p values of aroma, flavor and acidity are smaller than 0.05. It indicates these variables have a significant relationship with the quality class of coffee in this model. Then, a new model called model_1 with these significant coefficients is built.
 
 ```{r model with significant coefficients}
 # Model with significant coefficients
@@ -261,16 +261,16 @@ plot_model(model_1, show.values = TRUE,
            title = "Odds (Poor quality)",
            show.p = FALSE, digits=3)
 ```
-From Figure 7, it can be seen that for every 0.1 unit increase in aroma, the probability of being poor coffee becomes 0.012 times that of before. For every 0.1 increase in flavor, the probability of being poor coffee becomes 0.001 times that of before and for every 0.1 unit increase in acidity, the probability of being poor coffee quality becomes 0.037 times that of before.
+From Figure 7, it can be seen that for every 0.1 unit increase in aroma, the probability of being poor coffee becomes 0.012 times that of before. For every 0.1 increase in flavor, the probability of being poor coffee becomes 0.001 times that of before and for every 0.1 unit increase in acidity, the probability of being poor coffee becomes 0.037 times that of before.
 \newpage
 ```{r aroma, out.width="65%" , fig.align = "center", fig.cap = "\\label{fig:aroma} Probability of being poor quality by aroma."}
-# Possibilities of being poor-quality by aroma in model_1 is visualized 
+# Possibilities of being poor quality by aroma in model_1 is visualized 
 plot_model(model_1, type="pred", terms="aroma [all]", 
            axis.title = "Probability",
            title = "Probability of being poor quality by aroma")
 ```
 ```{r flavor, out.width="65%" , fig.align = "center", fig.cap = "\\label{fig:flavor} Probability of being poor quality by flavor."}
-# Possibilities of being poor-quality by flavor in model_1 is visualized 
+# Possibilities of being poor quality by flavor in model_1 is visualized 
 plot_model(model_1, type="pred", terms="flavor [all]", 
            axis.title = "Probability",
            title = "Probability of being poor quality by flavor")
@@ -282,14 +282,16 @@ plot_model(model_1, type="pred", terms="acidity [all]",
            title = "Probability of being poor quality by acidity")
 ```
 
-# Step 3: Summary and further task
+From Figures 8, 9 and 10, it can be seen that the probability of being poor quality would decrease with higher levels of aroma, flavor and acidity.
 
-Summary: Based on these plots above, high values of aroma, flavor and acidity all indicate a low probability of being poor coffee quality. In particular, the flavor has the most significant influence on the quality of coffee. 
+# Step 3: Summary and further work
+
+Summary: Based on these plots above, higher degrees of aroma, flavor and acidity all indicate a lower probability of being poor coffee quality. In particular, the flavor has the most significant influence on the quality of coffee in this model. 
 
 Further work:
 
-1. DARA SEPARATION\
-Since the dataset did not be separated into the train, valid and test sets, the model may be overfitting. This problem can be alleviated by data splitting. 
+1. DATA SEPARATION\
+Since the dataset is not separated into the train, valid and test sets, the model may be overfitting for prediction. This issue can be alleviated by data splitting. 
 
 2. HIGH CORRELATION\
-It can be noticed that there are high correlations between flavor and aroma, acidity and aroma, and acidity and flavor, which may lead to collinearity. Variance Inflation Factor(VIF) can be used to measure multicollinearity further. If it exists, transformation can be considered to make variables less correlated but still maintain their feature. Another method to solve this problem is Principal Component Analysis, which will reduce the dimensions of data by decomposing data into several independent factors. 
+It can be noticed that there are high correlations among flavor, acidity, and aroma. This may lead to collinearity. Variance Inflation Factor(VIF) can be used to measure multicollinearity further. If it exists, transformation can be considered to make variables less correlated, while maintaining their features. One of the method is Principal Component Analysis, which will reduce the dimensions of data by decomposing data into several independent factors. 

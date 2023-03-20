@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.12)  18 MAR 2023 19:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.12)  20 MAR 2023 23:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -810,16 +810,16 @@ Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/pair plot of c
 <glm_analysis_Group_11_files/figure-latex/barplot of harvested-1.pdf, id=108, 469.755pt x 325.215pt>
 File: glm_analysis_Group_11_files/figure-latex/barplot of harvested-1.pdf Graphic file (type pdf)
 <use glm_analysis_Group_11_files/figure-latex/barplot of harvested-1.pdf>
-Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/barplot of harvested-1.pdf  used on input line 788.
+Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/barplot of harvested-1.pdf  used on input line 790.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [9 <./glm_analysis_Group_11_files/figure-latex/barplot of harvested-1.pdf>]
 <glm_analysis_Group_11_files/figure-latex/barplot of country-1.pdf, id=119, 469.755pt x 325.215pt>
 File: glm_analysis_Group_11_files/figure-latex/barplot of country-1.pdf Graphic file (type pdf)
 <use glm_analysis_Group_11_files/figure-latex/barplot of country-1.pdf>
-Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/barplot of country-1.pdf  used on input line 810.
+Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/barplot of country-1.pdf  used on input line 812.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [10 <./glm_analysis_Group_11_files/figure-latex/barplot of country-1.pdf>] [11] [12] [13]
-Overfull \hbox (13.24358pt too wide) in paragraph at lines 1062--1062
+Overfull \hbox (13.24358pt too wide) in paragraph at lines 1064--1064
 []\T1/lmtt/m/n/10 ## glm(formula = Qualityclass ~ aroma + flavor + acidity, family = binomial(link = "logit"),[] 
  []
 
@@ -827,31 +827,31 @@ Overfull \hbox (13.24358pt too wide) in paragraph at lines 1062--1062
 <glm_analysis_Group_11_files/figure-latex/Odds (Poor quality)-1.pdf, id=149, 469.755pt x 325.215pt>
 File: glm_analysis_Group_11_files/figure-latex/Odds (Poor quality)-1.pdf Graphic file (type pdf)
 <use glm_analysis_Group_11_files/figure-latex/Odds (Poor quality)-1.pdf>
-Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/Odds (Poor quality)-1.pdf  used on input line 1096.
+Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/Odds (Poor quality)-1.pdf  used on input line 1098.
 (pdftex.def)             Requested size: 375.80452pt x 260.17235pt.
 [15 <./glm_analysis_Group_11_files/figure-latex/Odds (Poor quality)-1.pdf>]
 <glm_analysis_Group_11_files/figure-latex/aroma-1.pdf, id=160, 469.755pt x 325.215pt>
 File: glm_analysis_Group_11_files/figure-latex/aroma-1.pdf Graphic file (type pdf)
 <use glm_analysis_Group_11_files/figure-latex/aroma-1.pdf>
-Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/aroma-1.pdf  used on input line 1117.
+Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/aroma-1.pdf  used on input line 1119.
 (pdftex.def)             Requested size: 305.33713pt x 211.38724pt.
 <glm_analysis_Group_11_files/figure-latex/flavor-1.pdf, id=161, 469.755pt x 325.215pt>
 File: glm_analysis_Group_11_files/figure-latex/flavor-1.pdf Graphic file (type pdf)
 <use glm_analysis_Group_11_files/figure-latex/flavor-1.pdf>
-Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/flavor-1.pdf  used on input line 1135.
+Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/flavor-1.pdf  used on input line 1137.
 (pdftex.def)             Requested size: 305.33713pt x 211.38724pt.
 [16 <./glm_analysis_Group_11_files/figure-latex/aroma-1.pdf> <./glm_analysis_Group_11_files/figure-latex/flavor-1.pdf>]
 <glm_analysis_Group_11_files/figure-latex/acidity-1.pdf, id=184, 469.755pt x 325.215pt>
 File: glm_analysis_Group_11_files/figure-latex/acidity-1.pdf Graphic file (type pdf)
 <use glm_analysis_Group_11_files/figure-latex/acidity-1.pdf>
-Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/acidity-1.pdf  used on input line 1153.
+Package pdftex.def Info: glm_analysis_Group_11_files/figure-latex/acidity-1.pdf  used on input line 1155.
 (pdftex.def)             Requested size: 305.33713pt x 211.38724pt.
 [17 <./glm_analysis_Group_11_files/figure-latex/acidity-1.pdf>] (./glm_analysis_Group_11.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `glm_analysis_Group_11.out' has not changed.
-(rerunfilecheck)             Checksum: CFA8D4561A53FF5362B8DEAA1E6FCBE0;742.
+(rerunfilecheck)             Checksum: 885FEB6F9784C51ADF8ADFF220701AA6;742.
  ) 
 Here is how much of TeX's memory you used:
  11861 strings out of 477984
@@ -862,7 +862,7 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  75i,7n,76p,384b,582s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {c:/Users/Fanghua/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{c:/Users/Fanghua/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}<c:/Users/Fanghua/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/Fanghua/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/Fanghua/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/Fanghua/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/Users/Fanghua/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/Fanghua/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on glm_analysis_Group_11.pdf (17 pages, 1071657 bytes).
+Output written on glm_analysis_Group_11.pdf (17 pages, 1072474 bytes).
 PDF statistics:
  245 PDF objects out of 1000 (max. 8388607)
  191 compressed objects within 2 object streams
